@@ -1,0 +1,39 @@
+{
+  "contacts": [
+    {
+      "id": "id-1",
+      "name": "Rosie Simpson",
+      "number": "459-12-56"
+    },
+    {
+      "id": "id-2",
+      "name": "Hermione Kline",
+      "number": "443-89-12"
+    },
+    {
+      "id": "id-3",
+      "name": "Eden Clements",
+      "number": "645-17-79"
+    },
+    {
+      "id": "id-4",
+      "name": "Annie Copeland",
+      "number": "227-91-26"
+    },
+    {
+      "name": "Oksana Mazur",
+      "number": "+38067869676",
+      "id": "T2Iik9o"
+    },
+    {
+      "name": "demo clients",
+      "number": "+38067869676",
+      "id": "RiMfVzU"
+    },
+    {
+      "name": "Мазур",
+      "number": "0686494038",
+      "id": "IPp5LWu"
+    }
+  ]
+}
