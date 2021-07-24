@@ -1,86 +1,50 @@
 
 import React, { Component } from "react";
-import ContactList from './components/ContactList';
-import ContactForm from './components/ContactForm';
-import Filter from './components/Filter'
+import HomeView from './views/HomeView';
+import ContactView from './views/ContactsView'
+import RegisterView from './views/RegisterView'
+import LoginView from './views/LoginView'
+import NotFoundPage from './views/NotFoundPage'
+
+import Container from './components/Container/Container'
+import AppBar from './components/AppBap/AppBar'
+
+import { Route } from "react-router";
+
+
+const App = () => (
+  <Container>
+    <AppBar/>
+
+    <Route exact path="/" component={HomeView} />
+    <Route path="/register" component={RegisterView} />
+    <Route path="/login" component={LoginView} />
+    <Route path="/contacts" component={ContactView} />
+    <Route p component={NotFoundPage} />
+
+  </Container>
+)
 
 
 
+// class App extends Component {
 
-class App extends Component {
-  // state = {
-  //   contacts: contacts,
-  //   filter: '',
+//   render() {
 
+//     return (
 
-  // }
-  // componentDidMount() {
-  //   const contacts = localStorage.getItem('contacts')
-  //   const parsedContacts = JSON.parse(contacts);
-  //   if (parsedContacts) {
-  //     this.setState({ contacts: parsedContacts })
-  //   }
-
-  // }
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.contacts !== prevState.contacts) {
-  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
-  //   }
-
-  // }
-
-  // addContact = (name, number) => {
-  //   const contact = {
-  //     id: shortid.generate(),
-  //     name,
-  //     number,
-  //   }
-  //   const contactNames = this.state.contacts.map(contact => contact.name);
-  //   this.renderContacts(contactNames, contact.name, contact);
-
-  // }
-  // renderContacts = (contactList, contactName, newContact) => {
-  //   if (contactList.includes(contactName)) {
-  //     alert(`${contactName} is already in contacts`)
-  //   } else {
-  //     this.setState(({ contacts }) => ({
-  //       contacts: [...contacts, newContact],
-  //     }));
-  //   };
-  // };
+//       <div>
+//         <h1>PhoneBook</h1>
+//         <ContactForm />
+//         <h1>Contacts </h1>
+//         <Filter />
+//         <ContactList />
+//       </div>
 
 
-  // changeFilter = e => {
-  //   this.setState({ filter: e.currentTarget.value })
-  // }
+//     )
+//   }
 
-
-  // deleteContact = (contactId) => {
-  //   this.setState(prevState => ({
-  //     contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-
-  //   }))
-  // }
-
-  render() {
-    // const { contacts, filter } = this.state;
-    // const visibleContacts = this.getVisibleContacts
-    return (
-
-      <div>
-        <h1>PhoneBook</h1>
-        <ContactForm />
-        <h1>Contacts </h1>
-        <Filter/>
-        <ContactList/>
-          {/* // filterContacts={this.getFilteredContacts}
-          // onDeleteContact={this.deleteContact} /> */}
-      </div>
-
-
-    )
-  }
-
-}
+// }
 
 export default App;
