@@ -9,20 +9,23 @@ import NotFoundPage from './views/NotFoundPage'
 import Container from './components/Container/Container'
 import AppBar from './components/AppBap/AppBar'
 
-import { Route } from "react-router";
+import { Route, Switch } from "react-router";
 
 
 const App = () => (
+  
   <Container>
-    <AppBar/>
+    <AppBar />
+    <Switch>
 
     <Route exact path="/" component={HomeView} />
     <Route path="/register" component={RegisterView} />
     <Route path="/login" component={LoginView} />
     <Route path="/contacts" component={ContactView} />
-    <Route p component={NotFoundPage} />
+      <Route p component={NotFoundPage} />
+     </Switch>
 
-  </Container>
+    </Container>
 )
 
 

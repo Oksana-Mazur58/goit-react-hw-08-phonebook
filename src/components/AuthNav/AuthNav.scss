@@ -1,0 +1,12 @@
+.AuthNav {
+    justify-content: flex-end;
+  font-size: 20px;
+  color: currentColor;
+  margin-right: 30px;
+  text-decoration: none;
+  font-weight: 400;
+  margin-left: auto;
+}
+.AuthNav__active {
+  color: rgb(79, 82, 236);
+}
