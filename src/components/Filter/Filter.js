@@ -1,29 +1,34 @@
 import React from 'react';
-import FilterStyle from './Filter.module.css';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {getFilter} from '../../redux/phonebook/contacts-selector'
-import * as phonebookActions from '../../redux/phonebook/phonebook-actions'
+import { contactsActions } from '../../redux/contacts';
+import { getFilter } from '../../redux/contacts/contactsSelectors';
+import '../../styles/base.scss';
 
-const Filter = ({ value, onChangeFilter }) => (
-    <label className={FilterStyle.Filter__aria}>
-        Find contacts by name
-        <input type='text' value={value} onChange={onChangeFilter}
-            className={FilterStyle.Filter__input}>
-        </input>
-    </label>
-)
+const Filter = ({ value, onChange }) => {
+    return (
+        <label className='label'>
+            Find contact by name
+            <input
+                type="text"
+                value={value}
+                onChange={onChange}
+                className='input' />
+        </label>
+    );
+};
 
-const mapStateToProps = (state) => ({
-    value: getFilter(state),
-})
-const mapDispatchToProps = (dispatch) => ({
-    onChangeFilter: e => dispatch(phonebookActions.changeFilter(e.target.value))
-
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter)
 Filter.propTypes = {
-    value: PropTypes.string.isRequired,
-    onChangeFilter: PropTypes.func.isRequired
-}
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+    value: getFilter(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+    onChange: e => dispatch(contactsActions.changeFilter(e.target.value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

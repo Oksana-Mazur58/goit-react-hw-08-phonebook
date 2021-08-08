@@ -1,35 +1,49 @@
-import React from "react";
-import { connect } from "react-redux";
-import {contactsOperations} from "../../redux/phonebook";
-import {getFilteredContacts} from '../../redux/phonebook/contacts-selector'
-import "./ContactList.css";
+import React, { Component } from 'react';
+import ContactItem from '../ContactItem';
+import { connect } from 'react-redux';
+import { contactsOperations } from '../../redux/contacts'
+import { getLoader, getFilteredContacts } from '../../redux/contacts/contactsSelectors'
+import PropTypes from 'prop-types';
+import '../../styles/base.scss'
+import './ContactList.scss';
 
-const ContactsList = ({ filteredContacts, onDeleteContact }) => (
+class ContactsList extends Component {
+    static propTypes = {
+        contacts: PropTypes.array.isRequired,
+        onClick: PropTypes.func.isRequired
+    };
 
+    componentDidMount() {
+        this.props.fetchContacts();
+    };
 
-  <ul className="contact-list">
-    {filteredContacts.map(({ name, number, id }) => (
-      <li key={id} className="ContactList__item">
-        <span className="contact-name">{name} : </span>
-        <span className="ContactList__number"> {number}</span>
-        <button
-          className="ContactList__button"
-          onClick={() => onDeleteContact(id)}>
-          Удалить
-        </button>
-      </li>
-    ))}
-  </ul>
-);
+    render() {
+        return (
+            <>
+                {this.props.isLoadingContacts && <h1>Loading...</h1>}
+                <ul className='contact-list'>
+                    {this.props.contacts.map(({ id, name, number }) => {
+                        return (<li key={id} className='contact-item'><ContactItem
+                            name={name}
+                            number={number} />
+                            <button type='button'
+                                onClick={() => { this.props.onClick(id) }} className='button contact-item__button'>Delete</button>
+                        </li>)
+                    })}
+                </ul>
+            </>
+        );
+    };
+};
 
-const mapStateToProps = (state) => ({
-  filteredContacts: getFilteredContacts(state),
-  
+const mapStateToProps = state => ({
+    contacts: getFilteredContacts(state),
+    isLoadingContacts: getLoader(state)
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onDeleteContact: (id) => dispatch(contactsOperations.deleteContact(id)),
-
+const mapDispatchToProps = dispatch => ({
+    onClick: id => dispatch(contactsOperations.deleteContact(id)),
+    fetchContacts: () => dispatch(contactsOperations.fetchContacts())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactsList);

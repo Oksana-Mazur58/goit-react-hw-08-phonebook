@@ -1,44 +1,37 @@
 import React, { Component } from 'react';
-import ContactFormStyle from './ContactForm.module.css'
 import PropTypes from 'prop-types';
-import {getLoading} from '../../redux/phonebook/contacts-selector'
-import { connect } from 'react-redux'
-
-
-import {contactsOperations} from "../../redux/phonebook";
+import './ContactForm.scss'
+import { connect } from 'react-redux';
+import { contactsOperations } from '../../redux/contacts'
+import { getFilteredContacts } from '../../redux/contacts/contactsSelectors'
+import '../../styles/base.scss';
 
 class ContactForm extends Component {
-    static = {
+    static propTypes = {
         onSubmit: PropTypes.func.isRequired
-    }
+    };
 
     state = {
         name: '',
-        number: '',
+        number: ''
     };
-    componentDidMount() {
-        this.props.fetchContacts()
-    }
 
+    handleChange = (e) => {
+        this.setState({ [e.currentTarget.name]: e.currentTarget.value });
+    };
 
-
-    handleChangeName = e => {
-        this.setState({ name: e.currentTarget.value })
-    }
-    handleChangeNumber = e => {
-        this.setState({ number: e.currentTarget.value })
-    }
-    handleSubmit = e => {
+    handleSubmit = (e) => {
         e.preventDefault();
-        const { name, number } = this.state
-        // if (name !== '' && number !== '') {
-        this.props.onSubmit(name, number)
-        this.reset()
-        // }
-        // alert ('Please add name and phone number')
 
+        const { name, number } = this.state;
 
-    }
+        if (name !== '' && number !== '') {
+            this.props.allContacts.find(contact => contact.number === number)
+                ? alert('Hello')
+                : this.props.onSubmit(name, number);
+            this.reset();
+        } else { alert('Please fill empty fields') }
+    };
 
     reset() {
         this.setState({ name: '', number: '' });
@@ -46,45 +39,37 @@ class ContactForm extends Component {
 
     render() {
         return (
-            <div>
-                {this.props.isLoadingContacts && <h1>Loading...</h1>}
-            <form className={ContactFormStyle.Contacts__form} onSubmit={this.handleSubmit}>
-                
-                <p>Name</p>
-                <input
-                    type="text"
-                    name="name"
-                    value={this.state.name}
-                    pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                    title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
-                    required
-                    onChange={this.handleChangeName}
+            <form onSubmit={this.handleSubmit} className='contacts-form'>
 
-                />
-                <p>Number</p>
+                <label className='label'>
+                    Name<input
+                        type="text"
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                        name="name"
+                        className='input' />
+                </label>
 
-                <input
-                    type="tel"
-                    name="number"
-                    value={this.state.number}
-                    pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                    title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
-                    required
-                    onChange={this.handleChangeNumber}
-                />
-                <button type="submit" className={ContactFormStyle.ContactForm__button}>Add contact</button>
+                <label className='label'>
+                    Number<input
+                        type="tel"
+                        value={this.state.number}
+                        onChange={this.handleChange}
+                        name="number"
+                        className='input' />
+                </label>
+                <button type="submit" className='button contacts-form__button'>Add contact</button>
+            </form>
+        );
+    };
+};
 
-                </form>
-                </div>
-        )
-    }
-}
 const mapStateToProps = state => ({
-    isLoadingContacts: getLoading(state),
+    allContacts: getFilteredContacts(state)
 })
-const mapDispatchToProps = (dispatch) => ({
-    onSubmit: (name, number) => dispatch(contactsOperations.addContacts(name, number)),
-    fetchContacts: () => dispatch(contactsOperations.fetchContact())
 
-})
-export default connect(mapStateToProps, mapDispatchToProps)(ContactForm)
+const mapDispatchToProps = dispatch => ({
+    onSubmit: (name, number) => dispatch(contactsOperations.addContact(name, number)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

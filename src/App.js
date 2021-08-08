@@ -1,53 +1,54 @@
+import React, { Component, Suspense, lazy } from 'react';
+import { Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Container from './components/Container'
+import AppBar from './components/AppBar'
+import PublicRoute from './components/PublicRoute';
+import PrivateRoute from './components/PrivateRoute';
+import { authOperations } from './redux/auth'
 
-import React, { Component } from "react";
-import HomeView from './views/HomeView';
-import ContactView from './views/ContactsView'
-import RegisterView from './views/RegisterView'
-import LoginView from './views/LoginView'
-import NotFoundPage from './views/NotFoundPage'
+const HomeView = lazy(() => import('./views/HomeView'));
+const RegisterView = lazy(() => import('./views/RegisterView'));
+const LoginView = lazy(() => import('./views/LoginView'));
+const ContactsView = lazy(() => import('./views/ContactsView'));
 
-import Container from './components/Container/Container'
-import AppBar from './components/AppBap/AppBar'
+class App extends Component {
+  componentDidMount() {
+    this.props.onGetCurrentUser();
+  }
+  render() {
+    return (
+      <Container>
+        <AppBar />
+        <Suspense fallback={<h3>Loading...</h3>}>
+          <Switch>
+            <PublicRoute exact path="/" component={HomeView} />
+            <PublicRoute
+              path="/register"
+              restricted
+              redirectTo="/contacts"
+              component={RegisterView}
+            />
+            <PublicRoute
+              path="/login"
+              restricted
+              redirectTo="/contacts"
+              component={LoginView}
+            />
+            <PrivateRoute
+              path="/contacts"
+              redirectTo="/login"
+              component={ContactsView}
+            />
+          </Switch>
+        </Suspense>
+      </Container >
+    );
+  };
+};
 
-import { Route, Switch } from "react-router";
+const mapDispatchToProps = {
+  onGetCurrentUser: authOperations.getCurrentUser,
+};
 
-
-const App = () => (
-  
-  <Container>
-    <AppBar />
-    <Switch>
-
-    <Route exact path="/" component={HomeView} />
-    <Route path="/register" component={RegisterView} />
-    <Route path="/login" component={LoginView} />
-    <Route path="/contacts" component={ContactView} />
-      <Route p component={NotFoundPage} />
-     </Switch>
-
-    </Container>
-)
-
-
-
-// class App extends Component {
-
-//   render() {
-
-//     return (
-
-//       <div>
-//         <h1>PhoneBook</h1>
-//         <ContactForm />
-//         <h1>Contacts </h1>
-//         <Filter />
-//         <ContactList />
-//       </div>
-
-
-//     )
-//   }
-
-// }
-
-export default App;
+export default connect(null, mapDispatchToProps)(App);
